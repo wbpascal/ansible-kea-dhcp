@@ -40,6 +40,15 @@
     - kea_dhcp_version is version('1.7', '>=')
     - kea_dhcp_version is version('1.8', '<')
 
+- name: set_facts | Setting Repo Info (Debian)
+  set_fact:
+    kea_dhcp_repo: "{{ 'deb '+kea_dhcp_repos+'/kea-2-3/deb/'+ansible_distribution|lower+' '+ansible_distribution_release|lower+' main' }}"
+    kea_dhcp_repo_key: "{{ kea_dhcp_repos+'/kea-2-3/gpg.DA05D46B7BABA24A.key' }}"
+  when:
+    - ansible_os_family == "Debian"
+    - kea_dhcp_version is version('2.3', '>=')
+    - kea_dhcp_version is version('2.4', '<')
+
 - name: set_facts | Setting Repo Info (RedHat)
   set_fact:
     kea_dhcp_repo_key: "{{ kea_dhcp_repos+'/kea-1-7/cfg/gpg/gpg.40544590508A17DE.key' }}"
@@ -57,6 +66,18 @@
       - isc-kea-dhcp6-server
   when:
     - ansible_distribution == "Debian"
+    - kea_dhcp_version is version('2.0', '<')
+
+- name: set_facts | Setting Kea Packages (Debian)
+  set_fact:
+    kea_dhcp_packages:
+      - isc-kea-admin
+      - isc-kea-dhcp-ddns
+      - isc-kea-dhcp4
+      - isc-kea-dhcp6
+  when:
+    - ansible_distribution == "Debian"
+    - kea_dhcp_version is version('2.0', '>=')
 
 - name: set_facts | Setting Kea Packages (Ubuntu)
   set_fact:
