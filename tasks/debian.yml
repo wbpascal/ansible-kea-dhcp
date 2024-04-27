@@ -22,7 +22,7 @@
 - name: debian | Installing Kea DHCP Packages
   apt:
     name: "{{ kea_dhcp_packages }}"
-    state: present
+    state: latest
   become: true
   register: result
   until: result is successful
