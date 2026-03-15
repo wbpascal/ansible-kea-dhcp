@@ -36,6 +36,7 @@
   when:
     - ansible_os_family == "Debian"
     - ansible_distribution_version is version('13', '>=')
+  become: true
 
 - name: debian | Installing Kea DHCP Packages
   ansible.builtin.apt:
