@@ -11,13 +11,31 @@
   ansible.builtin.apt_key:
     url: "{{ kea_dhcp_repo_key }}"
     state: present
+  when:
+    - ansible_os_family == "Debian"
+    - ansible_distribution_version is version('12', '<=')
   become: true
 
 - name: debian | Adding Kea DHCP Repo
   ansible.builtin.apt_repository:
     repo: "{{ kea_dhcp_repo }}"
     state: present
+  when:
+    - ansible_os_family == "Debian"
+    - ansible_distribution_version is version('12', '<=')
   become: true
+
+- name: debian | Adding Kea DHCP Repo
+  ansible.builtin.deb822_repository:
+    name: kea
+    types: deb
+    uris: "{{ kea_dhcp_repo_uri }}"
+    suites: "{{ ansible_distribution_release | lower }}"
+    components: main
+    signed_by: "{{ kea_dhcp_repo_key }}"
+  when:
+    - ansible_os_family == "Debian"
+    - ansible_distribution_version is version('13', '>=')
 
 - name: debian | Installing Kea DHCP Packages
   ansible.builtin.apt:
