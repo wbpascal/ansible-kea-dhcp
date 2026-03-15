@@ -51,12 +51,23 @@
 
 - name: set_facts | Setting Repo Info (Debian)
   set_fact:
+    kea_dhcp_repo_uri: "{{ kea_dhcp_repos + '/kea-2-4/deb/' + ansible_distribution|lower }}"
     kea_dhcp_repo: "{{ 'deb '+kea_dhcp_repos+'/kea-2-4/deb/'+ansible_distribution|lower+' '+ansible_distribution_release|lower+' main' }}"
     kea_dhcp_repo_key: "{{ kea_dhcp_repos+'/kea-2-4/gpg.0D9D9A1439E23DB9.key' }}"
   when:
     - ansible_os_family == "Debian"
     - kea_dhcp_version is version('2.4', '>=')
     - kea_dhcp_version is version('2.5', '<')
+
+- name: set_facts | Setting Repo Info (Debian)
+  set_fact:
+    kea_dhcp_repo_uri: "{{ kea_dhcp_repos + '/kea-2-6/deb/' + ansible_distribution|lower }}"
+    kea_dhcp_repo: "{{ 'deb '+kea_dhcp_repos+'/kea-2-6/deb/'+ansible_distribution|lower+' '+ansible_distribution_release|lower+' main' }}"
+    kea_dhcp_repo_key: "{{ kea_dhcp_repos+'/kea-2-6/gpg.63D408891D8B8D01.key' }}"
+  when:
+    - ansible_os_family == "Debian"
+    - kea_dhcp_version is version('2.6', '>=')
+    - kea_dhcp_version is version('2.7', '<')
 
 - name: set_facts | Setting Repo Info (RedHat)
   ansible.builtin.set_fact:
